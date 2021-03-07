@@ -1,0 +1,54 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run All Fuzzers",
+      "type": "shell",
+      "command": "ctest -L Fuzz",
+      "args": [],
+      "group": "test",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Run Fuzzer",
+      "type": "shell",
+      "command": "${workspaceFolder}/build/${input:buildConfig}/fuzzers/${input:fuzzer}",
+      "args": [
+        "-max_total_time=${input:fuzzerMaxTime}",
+        "-max_len=8192",
+        "-print_final_stats=1",
+        "${workspaceFolder}/fuzzers/corpus/${input:fuzzer}/"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always"
+      },
+      "runOptions": { "reevaluateOnRerun": false }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "buildConfig",
+      "type": "pickString",
+      "description": "Choose build configuration",
+      "options": ["Debug", "Release"],
+      "default": "Release"
+    },
+    {
+      "id": "fuzzer",
+      "type": "pickString",
+      "description": "Choose fuzzer",
+      "options": ["fuzz_test"]
+    },
+    {
+      "id": "fuzzerMaxTime",
+      "type": "promptString",
+      "description": "Max total time (seconds)",
+      "default": "10"
+    }
+  ]
+}

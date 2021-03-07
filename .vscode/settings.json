@@ -1,0 +1,19 @@
+{
+  "editor.tabSize": 2,
+  "editor.rulers": [
+      80
+  ],
+
+  // "cmake.loggingLevel": "debug", // CMakeTools
+  "cmake.buildDirectory": "${workspaceRoot}/build/${buildType}",
+  "cmake.configureSettings": {
+  },
+  "cmake.configureArgs": [
+    // https://github.com/microsoft/vscode-cmake-tools/issues/892
+    "--log-level=DEBUG" // Enable to get more info from CMake.
+  ],
+
+  "files.trimTrailingWhitespace": true,
+  "files.associations": {
+  }
+}
