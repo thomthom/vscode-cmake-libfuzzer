@@ -13,6 +13,8 @@ endif()
 # Interface for linking to Clangs libraries.
 add_library(clang_fuzzer INTERFACE)
 
+# https://llvm.org/docs/LibFuzzer.html#fuzzer-usage
+
 if(WIN32)
   # Pick up the configured clang executable and not the one on PATH.
   # The CMAKE_CXX_COMPILER might be clang-cl.exe which doesn't support the
@@ -75,24 +77,19 @@ if(WIN32)
     "${CLANG_RT_ASAN_CXX}"
     "${CLANG_RT_FUZZER}"
   )
+
 else()
 
-  # https://llvm.org/docs/LibFuzzer.html#fuzzer-usage
   target_link_libraries(clang_fuzzer INTERFACE
-    # -coverage
-    # -fsanitize=fuzzer,undefined,address
     -fsanitize=fuzzer,address
   )
-  # https://github.com/llvm/llvm-project/blob/62ec4ac90738a5f2d209ed28c822223e58aaaeb7/compiler-rt/lib/fuzzer/FuzzerLoop.cpp#L833
-  # https://github.com/llvm/llvm-project/blob/62ec4ac90738a5f2d209ed28c822223e58aaaeb7/compiler-rt/test/fuzzer/not-instrumented.test
+
+endif()
+
+if(CAN_FUZZ)
   target_compile_options(clang_fuzzer INTERFACE
-    # -fsanitize=fuzzer,undefined,address
     -fsanitize=fuzzer,address
-    # -fsanitize-coverage=trace-pc-guard
   )
-
-  set(CAN_FUZZ YES)
-
 endif()
 
 message(STATUS "Can fuzz: ${CAN_FUZZ}")
