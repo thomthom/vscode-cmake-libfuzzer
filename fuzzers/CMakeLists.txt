@@ -80,6 +80,7 @@ if(WIN32)
 
 else()
 
+  set(CAN_FUZZ YES)
   target_link_libraries(clang_fuzzer INTERFACE
     -fsanitize=fuzzer,address
   )
